@@ -14,7 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * - Test different input values: All enum values (STANDARD, ELECTRIC, MOUNTAIN, CARGO)
  * - Test if/else branches: isElectric() method (branch coverage)
  * - Test switch statement: getMaxSpeedKmh() method (all branches)
- * - Optional: Add parameterized tests for testing all enum values efficiently
+ * - Optional: Add parameterized tests for testing all enum values efficiently 
+ * Hejsan
  */
 
 // This test is just an example to get you started. You will need to add more tests as per the challenges.
