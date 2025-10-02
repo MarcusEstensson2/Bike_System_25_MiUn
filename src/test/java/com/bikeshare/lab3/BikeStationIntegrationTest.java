@@ -108,6 +108,49 @@ public class BikeStationIntegrationTest {
       
     }
 
+    @Test
+    void chargeAvailableElectricBike(){
+        Bike eBike1 = new Bike("B007", Bike.BikeType.ELECTRIC);
+        Bike eBike2 = new Bike("B008", Bike.BikeType.ELECTRIC);
+        Bike eBike3 = new Bike("B009", Bike.BikeType.ELECTRIC);
+        Bike bike1 = new Bike("B010", Bike.BikeType.STANDARD);
+
+        station.addBike(eBike1);
+        station.addBike(eBike2);
+        station.addBike(eBike3);
+
+        station.removeBike("B007");
+        station.addBike(bike1);
+        station.enableCharging(5);
+
+        eBike2.startRide();
+        eBike2.endRide(10); 
+
+        double betteryAfterRide = eBike2.getBatteryLevel();
+        assertTrue(betteryAfterRide <= 80.0);
+
+        station.chargeElectricBikes(5); 
+        double batteryAfterCharge = eBike2.getBatteryLevel();
+        assertEquals(Math.min(100, betteryAfterRide + 5), batteryAfterCharge);
+
+        assertEquals(-1.0, bike1.getBatteryLevel());     
+        
+    }
+
+    @Test
+    void failToAddBike_stationUnderMaintanance(){
+
+        Bike bike1 = new Bike("B011", Bike.BikeType.STANDARD);
+        station.setMaintenance();
+
+        assertNull(station.getAvailableBike(null));
+
+        station.deactivate();
+        assertNull(station.getAvailableBike(Bike.BikeType.STANDARD));
+
+           }
+
+   
 
 }
 
