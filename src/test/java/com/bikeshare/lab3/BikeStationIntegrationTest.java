@@ -159,8 +159,37 @@ public class BikeStationIntegrationTest {
     void addBike_rejects_whenStationInactive() {
         station.deactivate();
         IllegalStateException ex = assertThrows(IllegalStateException.class,
-                () -> station.addBike(new Bike("B-11", Bike.BikeType.STANDARD)));
+                () -> station.addBike(new Bike("B012", Bike.BikeType.STANDARD)));
         assertTrue(ex.getMessage().toLowerCase().contains("inactive"));
     }
 
+    @Test
+    void chargeElectricBike_whenChargingDisabled_throwsExeption() {
+        Bike eBike = new Bike("B013", Bike.BikeType.ELECTRIC);
+        station.addBike(eBike);
+        station.disableCharging();
+
+        IllegalStateException ex = assertThrows(IllegalStateException.class,
+                () -> station.chargeElectricBikes(10));
+        assertTrue(ex.getMessage().toLowerCase().contains("Charging not available at this station"));
+    }
+
+    @Test
+    void removeBike_notFound_throwsException() {
+        IllegalStateException ex = assertThrows(IllegalStateException.class,
+                () -> station.removeBike("B014"));
+        assertTrue(ex.getMessage().toLowerCase().contains("not found"));
+    }
+
+    @Test
+    void addBikeTwice_throwsException() {
+        Bike bike = new Bike("B015", Bike.BikeType.STANDARD);
+        station.addBike(bike);
+
+        IllegalStateException ex = assertThrows(IllegalStateException.class,
+                () -> station.addBike(bike));
+        assertTrue(ex.getMessage().toLowerCase().contains("bike already at this station"));
+    }
+
+    
 }
