@@ -171,7 +171,7 @@ public class BikeStationIntegrationTest {
 
         IllegalStateException ex = assertThrows(IllegalStateException.class,
                 () -> station.chargeElectricBikes(10));
-        assertTrue(ex.getMessage().toLowerCase().contains("Charging not available at this station"));
+        assertTrue(ex.getMessage().toLowerCase().contains("charging not available at this station"));
     }
 
     @Test
