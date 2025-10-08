@@ -16,6 +16,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 /**
  * Lab 4: Mutation Testing Improvement Template
  * 
@@ -75,16 +78,20 @@ public class MutationImprovementTest {
         // Hint: Use a birthday that makes them 18 today
         // Hint: Mock the dependencies to return true for validation and auth
         // Hint: This test should kill the >= vs > mutation
+
+       LocalDate today = LocalDate.now();
+    LocalDate dateOfBirth = today.minusYears(18);
         
-        // String exactly18ID = "???"; // Figure out the right format
-        // when(mockIdValidator.isValidIDNumber(exactly18ID)).thenReturn(???);
-        // when(mockBankIdService.authenticate(exactly18ID)).thenReturn(???);
+    String exactly18ID = dateOfBirth.format(DateTimeFormatter.BASIC_ISO_DATE) + "-0000";
+         // Figure out the right format
+        when(mockIdValidator.isValidIDNumber(exactly18ID)).thenReturn(true);
+        when(mockBankIdService.authenticate(exactly18ID)).thenReturn(true);
         
-        // boolean result = ageValidator.isAdult(exactly18ID);
+        boolean result = ageValidator.isAdult(exactly18ID);
         
-        // assertTrue(result, "Person exactly 18 should be adult");
-        // verify(mockIdValidator).isValidIDNumber(exactly18ID);
-        // verify(mockBankIdService).authenticate(exactly18ID);
+        assertTrue(result, "Person exactly 18 should be adult");
+        verify(mockIdValidator).isValidIDNumber(exactly18ID);
+        verify(mockBankIdService).authenticate(exactly18ID);
     }
     
     // TODO: Write tests to kill conditional logic mutations
@@ -136,19 +143,22 @@ public class MutationImprovementTest {
     // TODO: Target the survived mutations on lines 43-44
     // These are related to birthday adjustment logic
     @Test
-    @DisplayName("Should kill birthday logic mutation: person before birthday")
+    @DisplayName("Turns 18 tomorrow -> NOT adult today (kills birthday adjustment mutation)")
     void shouldKillBirthdayMutation_PersonBeforeBirthday() {
-        // TODO: This is the tricky one - create a scenario where the birthday
-        // adjustment logic (age--) needs to be executed
-        // Hint: Create a person born in December, test before their birthday
-        // Hint: This targets the survived mutations in the current tests
-        
-        // Think about it: If someone is born Dec 31, 2005 and today is Dec 30, 2023,
-        // they are technically still 17 (haven't had their 18th birthday yet)
-        
-        // String preBirthdayId = "051231????"; // Complete this
-        // Configure mocks appropriately
-        // Test that they are NOT adult yet
+        // Person fyller 18 i morgon (ännu inte 18)
+        LocalDate today = LocalDate.now();
+        LocalDate birth = today.minusYears(18).plusDays(1);
+ 
+        String preBirthdayId = birth.format(DateTimeFormatter.BASIC_ISO_DATE) + "-0000";
+ 
+        when(mockIdValidator.isValidIDNumber(preBirthdayId)).thenReturn(true);
+        when(mockBankIdService.authenticate(preBirthdayId)).thenReturn(true);
+ 
+        boolean result = ageValidator.isAdult(preBirthdayId);
+ 
+        assertFalse(result, "Not yet 18 -> should NOT be adult");
+        verify(mockIdValidator).isValidIDNumber(preBirthdayId);
+        verify(mockBankIdService).authenticate(preBirthdayId);
     }
     
     // TODO: Write more tests for other mutation types
