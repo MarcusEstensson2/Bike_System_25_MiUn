@@ -103,18 +103,19 @@ public class MutationImprovementTest {
         // Hint: Mock mockIdValidator.isValidIDNumber() to return false
         // Hint: This should throw IllegalArgumentException
         // Hint: BankID service should NOT be called when ID is invalid
+
         
-        // String invalidId = "invalid123";
-        // when(mockIdValidator.isValidIDNumber(invalidId)).thenReturn(false);
+         String invalidId = "05123012345";
+         when(mockIdValidator.isValidIDNumber(invalidId)).thenReturn(false);
         
-        // IllegalArgumentException exception = assertThrows(
-        //     IllegalArgumentException.class,
-        //     () -> ageValidator.isAdult(invalidId)
-        // );
+         IllegalArgumentException exception = assertThrows(
+             IllegalArgumentException.class,
+             () -> ageValidator.isAdult(invalidId)
+         );
         
-        // assertEquals("Invalid ID number", exception.getMessage());
-        // verify(mockIdValidator).isValidIDNumber(invalidId);
-        // verifyNoInteractions(mockBankIdService); // Important: BankID not called
+         assertEquals("Invalid ID number", exception.getMessage());
+         verify(mockIdValidator).isValidIDNumber(invalidId);
+         verifyNoInteractions(mockBankIdService); // Important: BankID not called
     }
     
     // TODO: Write tests to kill authentication mutations
@@ -126,18 +127,18 @@ public class MutationImprovementTest {
         // Hint: ID validation passes, but authentication fails
         // Hint: Should throw IllegalArgumentException with "Authentication failed"
         
-        // String validId = "200101010000";
-        // when(mockIdValidator.isValidIDNumber(validId)).thenReturn(true);
-        // when(mockBankIdService.authenticate(validId)).thenReturn(false);
+         String validId = "200101010000";
+         when(mockIdValidator.isValidIDNumber(validId)).thenReturn(true);
+         when(mockBankIdService.authenticate(validId)).thenReturn(false);
         
-        // IllegalArgumentException exception = assertThrows(
-        //     IllegalArgumentException.class,
-        //     () -> ageValidator.isAdult(validId)
-        // );
+         IllegalArgumentException exception = assertThrows(
+             IllegalArgumentException.class,
+             () -> ageValidator.isAdult(validId)
+         );
         
-        // assertEquals("Authentication failed", exception.getMessage());
-        // verify(mockIdValidator).isValidIDNumber(validId);
-        // verify(mockBankIdService).authenticate(validId);
+         assertEquals("Authentication failed", exception.getMessage());
+         verify(mockIdValidator).isValidIDNumber(validId);
+         verify(mockBankIdService).authenticate(validId);
     }
     
     // TODO: Target the survived mutations on lines 43-44
